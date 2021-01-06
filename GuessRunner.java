@@ -1,19 +1,34 @@
 public class GuessRunner {
 
-	static boolean processGuess(int target, int guess) {
+	static Result processGuess(int target, int guess) {
+		String des = Integer.toString(target);
+		String src = Integer.toString(guess);
 		int hits=0;
 		int strikes=0;
 		
-		/* Provide your implementation to process 
-		 * the guess by your oponent.
-		 * Your code need to properly count the number of strikes and hits
-		 * Code to print out the output of the guess is provided below
-		 */
-		 
+		// process strikes
+		for (int i=0; i<4; i++) {
+			if (src.charAt(i) == des.charAt(i)) {
+				strikes++;
+				des = des.replace(des.charAt(i), 'a');
+				src = src.replace(src.charAt(i), 'a');
+			}
+		}
+		// process hits
+		for (int i=0; i<4; i++) {
+			for (int j=0; j<4; j++) {
+				if (src.charAt(i)!='a') {
+					if (src.charAt(i)==des.charAt(j)) {
+						hits++;
+						break;
+					}
+				}
+			}
+		}
 		System.out.printf("\t");
 		if (strikes==4)	{ // game over
 			System.out.printf("4 strikes - Game over\n");
-			return true;
+			return new Result(hits, strikes);
 		}
 		if (hits==0 && strikes==0)
 			System.out.printf("Miss\n");
@@ -23,27 +38,25 @@ public class GuessRunner {
 			System.out.printf("%d strikes\n", strikes);
 		else if(hits>0 && strikes>0)
 			System.out.printf("%d strikes and %d hits\n", strikes, hits);
-		return false;
+		
+		return new Result(hits, strikes);
 	}
 
 	public static void main(String[] args) {
-		boolean correct=false;
 		int guess_cnt = 0;
-		
-		 /* A dummy value, you need to code here
-		  * to get a target number for your oponent
-		  * should be a random number between [1000-9999]
-		  */
+		/* A dummy value, you need to code here
+		 * to get a target number for your oponent
+		 * should be a random number between [1000-9999]
+		 */
 		int target = 1234;
-		
+		Result res = new Result();
 		System.out.println("Guess\tResponse\n");
-		while(!correct) {
-			
+		while(res.getStrikes() < 4) {
 			/* take a guess from user provided class
 			 * the user provided class must be a Guess.class file
 			 * that has implemented a static function called make_guess()
 			 */
-			int guess = Guess.make_guess();
+			int guess = Guess.make_guess(res.getHits(), res.getStrikes());
 			System.out.printf("%d\n", guess);
 			
 			if (guess == -1) {	// user quits
@@ -55,7 +68,7 @@ public class GuessRunner {
 			/* You need to code this method to process a guess
 			 * provided by your oponent
 			 */
-			correct = processGuess(target, guess);
+			res = processGuess(target, guess);
 		}
 		System.out.printf("Target: %d - Number of guesses: %d\n", target, guess_cnt);
 	}

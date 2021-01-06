@@ -6,7 +6,7 @@
  */
 public class Guess {
 	
-	public static int make_guess() {
+	public static int make_guess(int hits, int strikes) {
 		// just a dummy guess
 		int myguess = 1000;
 		
