@@ -7,13 +7,13 @@
 public class Guess {
 	
 	public static int make_guess(int hits, int strikes) {
-		// just a dummy guess
-		int myguess = 1000;
+		// Initial guesses to evaluate
+		int[] initialGuesses = {1234, 5678, 9900};
 		
 		/*
 		 * IMPLEMENT YOUR GUESS STRATEGY HERE
 		 */
 		 
-		return myguess;
+		return initialGuesses[0];
 	}
 }
