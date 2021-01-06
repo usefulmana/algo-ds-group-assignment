@@ -44,22 +44,35 @@ public class GuessRunner {
         return new Result(hits, strikes);
     }
 
+    /**
+     * Get and validate a user's input
+     * @return an integer between 1000 and 9999
+     */
     static int getUserInput() {
+
+        // Initialize the scanner class
         Scanner scanner = new Scanner(System.in);
 
+        // Declare target variable
         int target;
 
         // Input Validation
         do {
             System.out.print("Please enter an integer between 1000 and 9999: ");
+
+            // Loop to check whether the user input is a number
             while (!scanner.hasNextInt()) {
                 System.out.println("The target number must be an integer between 1000 and 9999");
                 System.out.print("Please enter an integer between 1000 and 9999: ");
+                // Move to the next input
                 scanner.next();
             }
+            // Get user input
             target = scanner.nextInt();
+
         } while (target < 1000 || target > 9999);
 
+        // Close scanner
         scanner.close();
 
         return target;
