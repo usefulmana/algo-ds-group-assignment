@@ -3,42 +3,43 @@ import java.util.Scanner;
 public class GuessRunner {
 
     static Result processGuess(int target, int guess) {
-        String des = Integer.toString(target);
-        String src = Integer.toString(guess);
-        int hits = 0;
-        int strikes = 0;
+        char des[] = Integer.toString(target).toCharArray();
+        char src[] = Integer.toString(guess).toCharArray();
+        int hits=0;
+        int strikes=0;
 
         // process strikes
-        for (int i = 0; i < 4; i++) {
-            if (src.charAt(i) == des.charAt(i)) {
+        for (int i=0; i<4; i++) {
+            if (src[i] == des[i]) {
                 strikes++;
-                des = des.replace(des.charAt(i), 'a');
-                src = src.replace(src.charAt(i), 'a');
+                des[i] = 'a';
+                src[i] = 'a';
             }
         }
         // process hits
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (src.charAt(i) != 'a') {
-                    if (src.charAt(i) == des.charAt(j)) {
+        for (int i=0; i<4; i++) {
+            for (int j=0; j<4; j++) {
+                if (src[i]!='a') {
+                    if (src[i]==des[j]) {
                         hits++;
+                        des[j] = 'a';
                         break;
                     }
                 }
             }
         }
         System.out.printf("\t");
-        if (strikes == 4) { // game over
+        if (strikes==4)	{ // game over
             System.out.printf("4 strikes - Game over\n");
             return new Result(hits, strikes);
         }
-        if (hits == 0 && strikes == 0)
+        if (hits==0 && strikes==0)
             System.out.printf("Miss\n");
-        else if (hits > 0 && strikes == 0)
+        else if(hits>0 && strikes==0)
             System.out.printf("%d hits\n", hits);
-        else if (hits == 0 && strikes > 0)
+        else if(hits==0 && strikes>0)
             System.out.printf("%d strikes\n", strikes);
-        else if (hits > 0 && strikes > 0)
+        else if(hits>0 && strikes>0)
             System.out.printf("%d strikes and %d hits\n", strikes, hits);
 
         return new Result(hits, strikes);
@@ -58,12 +59,12 @@ public class GuessRunner {
 
         // Input Validation
         do {
-            System.out.print("Please enter an integer between 1000 and 9999: ");
+            System.out.print("Enter a target integer between 1000 and 9999: ");
 
             // Loop to check whether the user input is a number
             while (!scanner.hasNextInt()) {
                 System.out.println("The target number must be an integer between 1000 and 9999");
-                System.out.print("Please enter an integer between 1000 and 9999: ");
+                System.out.print("Enter a target integer between 1000 and 9999: ");
                 // Move to the next input
                 scanner.next();
             }
