@@ -1,4 +1,3 @@
-import java.util.Scanner;
 
 public class GuessRunner {
 
@@ -45,39 +44,6 @@ public class GuessRunner {
         return new Result(hits, strikes);
     }
 
-    /**
-     * Get and validate a user's input
-     * @return an integer between 1000 and 9999
-     */
-    static int getUserInput() {
-
-        // Initialize the scanner class
-        Scanner scanner = new Scanner(System.in);
-
-        // Declare target variable
-        int target;
-
-        // Input Validation
-        do {
-            System.out.print("Enter a target integer between 1000 and 9999: ");
-
-            // Loop to check whether the user input is a number
-            while (!scanner.hasNextInt()) {
-                System.out.println("The target number must be an integer between 1000 and 9999");
-                System.out.print("Enter a target integer between 1000 and 9999: ");
-                // Move to the next input
-                scanner.next();
-            }
-            // Get user input
-            target = scanner.nextInt();
-
-        } while (target < 1000 || target > 9999);
-
-        // Close scanner
-        scanner.close();
-
-        return target;
-    }
 
     public static void main(String[] args) {
         int guess_cnt = 0;
@@ -85,8 +51,10 @@ public class GuessRunner {
          * to get a target number from your opponent
          * should be a random number between [1000-9999]
          */
-        int target = getUserInput();
-
+        int min = 6000;
+        int max = 9999;
+        int target = (int) ((Math.random() * (max - min)) + min);;
+        System.out.println("The target is " + target);
         Result res = new Result();
 
         System.out.println("Guess\tResponse\n");
