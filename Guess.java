@@ -16,4 +16,15 @@ public class Guess {
 		 
 		return initialGuesses[0];
 	}
+
+	public static int[] breakNumberIntoDigits(int num){
+		int[] result = new int[4];
+		int count = 0;
+		while (num > 0){
+			result[count] = num % 10;
+			num = num / 10;
+			count++;
+		}
+		return result;
+	}
 }
