@@ -9,51 +9,53 @@ import java.util.Set;
  * PLEASE DO NOT CHANGE THE NAME OF THE CLASS AND THE METHOD
  */
 public class Guess {
+    // Initializing necessary variables
     private static final Set<Integer> possibleAnswers = generateAllPossibleNumbers();
     private static boolean first = true;
     private static int currGuess = 0;
 
     public static int make_guess(int hits, int strikes) {
 
-    	// First guess
+        // First guess
         int guess = 1234;
-
+        // Check if this is the first guess
         if (first) {
-
-			currGuess = guess;
+            // Assign currGuess to guess
+            currGuess = guess;
+            // Disable the first flag
             first = false;
         } else {
             // Pruning possible answers
-			Iterator<Integer> integerIterator = possibleAnswers.iterator();
-			while (integerIterator.hasNext()){
-				int[] scores = score(integerIterator.next(), currGuess);
-				if (scores[0] != strikes || scores[1] != hits) {
-					integerIterator.remove();
-				}
-			}
+            // Remove any number from the set that would not give the same response if it (the guess) were the target.
+            Iterator<Integer> integerIterator = possibleAnswers.iterator();
+            while (integerIterator.hasNext()) {
+                int[] scores = score(integerIterator.next(), currGuess);
+                if (scores[0] != strikes || scores[1] != hits) {
+                    integerIterator.remove();
+                }
+            }
 
+            // Give a guess
             // Choose a random number
-			// TODO Need to replace this method with something else
-			// TODO Minimax or Entropy?
+            // TODO Need to replace this method with something else
+            // TODO Minimax or Entropy?
             for (Integer i : possibleAnswers) {
                 guess = i;
                 currGuess = guess;
                 break;
             }
         }
-
         return guess;
     }
 
     /**
-     * PROBLEM IS HERE? IS THIS EVEN LEGAL?
+     * A method score the guess internally
      *
-     * @param target
-     * @param guess
-     * @return
+     * @param target: target number
+     * @param guess:  the guess
+     * @return: an int array with two elements => strikes and hits respectively
      */
     public static int[] score(int target, int guess) {
-        // IS THIS EVEN LEGAL IN THE COMPETITION?
         char des[] = Integer.toString(target).toCharArray();
         char src[] = Integer.toString(guess).toCharArray();
         int hits = 0;
@@ -85,8 +87,15 @@ public class Guess {
         return scores;
     }
 
+    /**
+     * Will generate a possible number within a give range from 1000 => 10000 (exclusive)
+     *
+     * @return an ordered set of integers from 1000 => 9999
+     */
     public static Set<Integer> generateAllPossibleNumbers() {
+        // Initialize an unordered set
         Set<Integer> numbers = new HashSet<>();
+        // Add items to the set
         for (int i = 1000; i < 10000; i++) {
             numbers.add(i);
         }
@@ -94,7 +103,7 @@ public class Guess {
     }
 
     private static int guessWithEntropy() {
-    	// TODO INCOMPLETE
+        // TODO
         int minEntropy = (int) Math.pow(10, 9);
         int currEntropy = 0;
         for (Integer i : possibleAnswers) {
