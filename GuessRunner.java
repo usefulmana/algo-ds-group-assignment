@@ -84,8 +84,7 @@ public class GuessRunner {
     }
 
     /**
-     * Generate a random number within a range (inclusive)
-     *
+     * Generate a set of random integers within a range (inclusive)
      * @param min: min value
      * @param max: max value
      * @return: a random number
