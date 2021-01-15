@@ -18,7 +18,7 @@ public class Guess {
 
         // First guess
         int guess = 1234;
-        // Check if this is the first guess
+        // Check if the current guess is the first guess
         if (first) {
             // Assign currGuess to guess
             currGuess = guess;
@@ -30,7 +30,9 @@ public class Guess {
             Iterator<Integer> integerIterator = possibleAnswers.iterator();
             while (integerIterator.hasNext()) {
                 int[] scores = score(integerIterator.next(), currGuess);
+                // Compare scores
                 if (scores[0] != strikes || scores[1] != hits) {
+                    // Remove if the scores do not match
                     integerIterator.remove();
                 }
             }
@@ -88,7 +90,7 @@ public class Guess {
     }
 
     /**
-     * Will generate a possible number within a give range from 1000 => 10000 (exclusive)
+     * Will generate a set of all possible integers within a give range from 1000 => 10000 (exclusive)
      *
      * @return an ordered set of integers from 1000 => 9999
      */
