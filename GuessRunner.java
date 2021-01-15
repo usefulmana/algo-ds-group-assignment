@@ -54,28 +54,31 @@ public class GuessRunner {
          */
         // High range for the target number to discourage brute forcers
         int target = getTarget(6000, 9999);
+
         Result res = new Result();
 
         System.out.println("Guess\tResponse\n");
 
-//        while (res.getStrikes() < 4) {
-//            /* take a guess from user provided class
-//             * the user provided class must be a Guess.class file
-//             * that has implemented a static function called make_guess()
-//             */
-//            int guess = Guess.make_guess(res.getHits(), res.getStrikes());
-//
-//            System.out.printf("%d\n", guess);
-//
-//            if (guess == -1) {    // user quits
-//                System.out.printf("you quit: %d\n", target);
-//                return;
-//            }
-//
-//            guess_cnt++;
-//
-//            res = processGuess(target, guess);
-//        }
+        while (res.getStrikes() < 4) {
+            /* take a guess from user provided class
+             * the user provided class must be a Guess.class file
+             * that has implemented a static function called make_guess()
+             */
+            int guess = Guess.make_guess(res.getHits(), res.getStrikes());
+
+            System.out.printf("%d\n", guess);
+
+            if (guess == -1) {    // user quits
+                System.out.printf("you quit: %d\n", target);
+                return;
+            }
+
+            guess_cnt++;
+
+            res = processGuess(target, guess);
+        }
+
+
         System.out.printf("Target: %d - Number of guesses: %d\n", target, guess_cnt);
     }
 
