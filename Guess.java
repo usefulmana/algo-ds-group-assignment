@@ -17,10 +17,14 @@ public class Guess {
 		int guess;
 
 		if (first){
+			// Shuffle the array
+			Collections.shuffle(possibleAnswers);
+			// Choose a random answer
 			guess = possibleAnswers.get(0);
 			first = false;
 		}
 		else {
+			// Pruning possible answers
 			for (int i = 1; i < possibleAnswers.size(); i++) {
 				int[] scores = score(possibleAnswers.get(i), possibleAnswers.get(0));
 
@@ -28,7 +32,9 @@ public class Guess {
 					int k = possibleAnswers.remove(i);
 				}
 			}
+			// Shuffle again
 			Collections.shuffle(possibleAnswers);
+			// Choose a random number
 			guess = possibleAnswers.get(0);
 		}
 		
@@ -94,7 +100,6 @@ public class Guess {
 		for (int i = 1000; i < 10000; i++) {
 			numbers.add(i);
 		}
-		Collections.shuffle(numbers);
 		return numbers;
 	}
 
