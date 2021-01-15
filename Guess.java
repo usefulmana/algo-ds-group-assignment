@@ -15,11 +15,11 @@ public class Guess {
 
     public static int make_guess(int hits, int strikes) {
 
-        int guess = 0;
+    	// First guess
+        int guess = 1234;
 
         if (first) {
-            // First guess
-			guess = 1122;
+
 			currGuess = guess;
             first = false;
         } else {
@@ -33,6 +33,8 @@ public class Guess {
 			}
 
             // Choose a random number
+			// TODO Need to replace this method with something else
+			// TODO Minimax or Entropy?
             for (Integer i : possibleAnswers) {
                 guess = i;
                 currGuess = guess;
@@ -88,7 +90,6 @@ public class Guess {
         for (int i = 1000; i < 10000; i++) {
             numbers.add(i);
         }
-		System.out.printf("BIGGGGGGGGGGGGGGGG %d\n",numbers.size());
         return numbers;
     }
 

@@ -96,7 +96,7 @@ public class GuessRunner {
         boolean distinct = hasDistinctDigits(target);
 
         // This will ensure the randomized number will always have duplicate digits
-        // This will break program does not accept numbers with repeating digits as input
+        // This will break program that does not accept numbers with repeating digits as inputs
         if (distinct){
             char[] digits = Integer.toString(target).toCharArray();
             digits[random.nextInt(2) + 1] = digits[3];
