@@ -1,4 +1,3 @@
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -10,7 +9,7 @@ import java.util.Set;
  * PLEASE DO NOT CHANGE THE NAME OF THE CLASS AND THE METHOD
  */
 public class Guess {
-    private static Set<Integer> possibleAnswers = generateAllPossibleNumbers();
+    private static final Set<Integer> possibleAnswers = generateAllPossibleNumbers();
     private static boolean first = true;
     private static int currGuess = 0;
 
@@ -19,12 +18,9 @@ public class Guess {
         int guess = 0;
 
         if (first) {
-            // Choose a random answer
-            for (Integer i : possibleAnswers) {
-                guess = i;
-                currGuess = guess;
-                break;
-            }
+            // First guess
+			guess = 1122;
+			currGuess = guess;
             first = false;
         } else {
             // Pruning possible answers
@@ -92,6 +88,7 @@ public class Guess {
         for (int i = 1000; i < 10000; i++) {
             numbers.add(i);
         }
+		System.out.printf("BIGGGGGGGGGGGGGGGG %d\n",numbers.size());
         return numbers;
     }
 
