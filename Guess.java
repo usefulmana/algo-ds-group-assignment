@@ -1,6 +1,4 @@
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /*
  * You need to implement an algorithm to make guesses
@@ -11,6 +9,7 @@ import java.util.Set;
 public class Guess {
     // Initializing necessary variables
     private static final Set<Integer> possibleAnswers = generateAllPossibleNumbers();
+    private static final List<Integer> impossibleAnswers = new ArrayList<>();
     private static boolean first = true;
     private static int currGuess = 0;
 
@@ -29,23 +28,23 @@ public class Guess {
             // Remove any number from the set that would not give the same response if it (the guess) were the target.
             Iterator<Integer> integerIterator = possibleAnswers.iterator();
             while (integerIterator.hasNext()) {
-                int[] scores = score(integerIterator.next(), currGuess);
+                Integer i =  integerIterator.next();
+                int[] scores = score(i, currGuess);
                 // Compare scores
                 if (scores[0] != strikes || scores[1] != hits) {
+                    // Add to impossible set for later usage
+                    impossibleAnswers.add(i);
                     // Remove if the scores do not match
                     integerIterator.remove();
                 }
             }
 
             // Give a guess
-            // Choose a random number
-            // TODO Need to replace this method with something else
-            // TODO Minimax or Entropy?
-            for (Integer i : possibleAnswers) {
-                guess = i;
-                currGuess = guess;
-                break;
-            }
+            guess = guessWithMinimax();
+            // TODO Implement entropy method and compare with minimax
+//            guess = guessWithEntropy();
+            // Update current guess;
+            currGuess = guess;
         }
         return guess;
     }
@@ -104,6 +103,11 @@ public class Guess {
         return numbers;
     }
 
+    /**
+     * Guess a number using the entropy technique
+     * Ref: http://primepuzzle.com/tc/entropy.html
+     * @return a 4-digit integer
+     */
     private static int guessWithEntropy() {
         // TODO
         int minEntropy = (int) Math.pow(10, 9);
@@ -119,9 +123,60 @@ public class Guess {
         return currEntropy;
     }
 
+    /**
+     * Guess a number using the minimax technique
+     * Ref: https://en.wikipedia.org/wiki/Mastermind_(board_game)
+     * @return a 4-digit integer
+     */
     private static int guessWithMinimax() {
-        // TODO
-        return 0;
+
+        // Initialize necessary variables
+        int minimumEliminated = -1;
+        int bestGuess = 0;
+
+        // Initialize a new list with possibleAnswers' elements
+        List<Integer> unused = new ArrayList<>(possibleAnswers);
+        // Add impossible answers to the list
+        unused.addAll(impossibleAnswers);
+
+        // Loop through all elements
+        for (Integer i : unused){
+
+            // Initialize a minimax table
+            // This table will contain all the scores
+            int[][] miniMaxTable = new int[5][5];
+
+            // Check possible answers with the unused list elements
+            for (Integer j : possibleAnswers){
+                // Calculate the scores
+                int[] results = score(i, j);
+                // Save scores
+                miniMaxTable[results[1]][results[0]]++;
+            }
+
+            int mostHits = -1;
+
+            // Loop through the table to find the most hits
+            // Loop through row
+            for (int[] row: miniMaxTable){
+                // Loop through columns
+                for (int k: row){
+                    // Take either the most hits or the most strikes
+                    mostHits = Integer.max(k, mostHits);
+                }
+            }
+
+            // Calculate the score of a guess
+            int scr = possibleAnswers.size() - mostHits;
+
+
+            if (scr > minimumEliminated){
+                // If the score of the guess is greater than the min => it's the current best guess
+                minimumEliminated = scr;
+                bestGuess = i;
+            }
+        }
+        return bestGuess;
     }
 
 }
