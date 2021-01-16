@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /*
  * You need to implement an algorithm to make guesses
@@ -8,8 +10,8 @@ import java.util.*;
  */
 public class Guess {
     // Initializing necessary variables
-    private static final Set<Integer> possibleAnswers = generateAllPossibleNumbers();
-    private static final List<Integer> impossibleAnswers = new ArrayList<>();
+    private static final List<Integer> possibleAnswers = generateAllPossibleNumbers();
+    private static final List<Integer> impossibleAnswers = new LinkedList<>();
     private static boolean first = true;
     private static int currGuess = 0;
 
@@ -28,11 +30,11 @@ public class Guess {
             // Remove any number from the set that would not give the same response if it (the guess) were the target.
             Iterator<Integer> integerIterator = possibleAnswers.iterator();
             while (integerIterator.hasNext()) {
-                Integer i =  integerIterator.next();
+                Integer i = integerIterator.next();
                 int[] scores = score(i, currGuess);
                 // Compare scores
                 if (scores[0] != strikes || scores[1] != hits) {
-                    // Add to impossible set for later usage
+                    // Add to the impossible list for later use
                     impossibleAnswers.add(i);
                     // Remove if the scores do not match
                     integerIterator.remove();
@@ -89,13 +91,13 @@ public class Guess {
     }
 
     /**
-     * Will generate a set of all possible integers within a give range from 1000 => 10000 (exclusive)
+     * Will generate a linked list of all possible integers within a give range from 1000 => 10000 (exclusive)
      *
-     * @return an ordered set of integers from 1000 => 9999
+     * @return a linked list of integers from 1000 => 9999
      */
-    public static Set<Integer> generateAllPossibleNumbers() {
+    public static List<Integer> generateAllPossibleNumbers() {
         // Initialize an unordered set
-        Set<Integer> numbers = new HashSet<>();
+        List<Integer> numbers = new LinkedList<>();
         // Add items to the set
         for (int i = 1000; i < 10000; i++) {
             numbers.add(i);
@@ -106,6 +108,7 @@ public class Guess {
     /**
      * Guess a number using the entropy technique
      * Ref: http://primepuzzle.com/tc/entropy.html
+     *
      * @return a 4-digit integer
      */
     private static int guessWithEntropy() {
@@ -126,6 +129,7 @@ public class Guess {
     /**
      * Guess a number using the minimax technique
      * Ref: https://en.wikipedia.org/wiki/Mastermind_(board_game)
+     *
      * @return a 4-digit integer
      */
     private static int guessWithMinimax() {
@@ -135,19 +139,19 @@ public class Guess {
         int bestGuess = 0;
 
         // Initialize a new list with possibleAnswers' elements
-        List<Integer> unused = new ArrayList<>(possibleAnswers);
+        List<Integer> unused = new LinkedList<>(possibleAnswers);
         // Add impossible answers to the list
         unused.addAll(impossibleAnswers);
 
         // Loop through all elements
-        for (Integer i : unused){
+        for (Integer i : unused) {
 
             // Initialize a minimax table
             // This table will contain all the scores
             int[][] miniMaxTable = new int[5][5];
 
             // Check possible answers with the unused list elements
-            for (Integer j : possibleAnswers){
+            for (Integer j : possibleAnswers) {
                 // Calculate the scores
                 int[] results = score(i, j);
                 // Save scores
@@ -158,9 +162,9 @@ public class Guess {
 
             // Loop through the table to find the most hits
             // Loop through row
-            for (int[] row: miniMaxTable){
+            for (int[] row : miniMaxTable) {
                 // Loop through columns
-                for (int k: row){
+                for (int k : row) {
                     // Take either the most hits or the most strikes
                     mostHits = Integer.max(k, mostHits);
                 }
@@ -170,7 +174,7 @@ public class Guess {
             int scr = possibleAnswers.size() - mostHits;
 
 
-            if (scr > minimumEliminated){
+            if (scr > minimumEliminated) {
                 // If the score of the guess is greater than the min => it's the current best guess
                 minimumEliminated = scr;
                 bestGuess = i;
