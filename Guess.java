@@ -10,8 +10,12 @@ import java.util.List;
  */
 public class Guess {
     // Initializing necessary variables
-    private static final List<Integer> possibleAnswers = generateAllPossibleNumbers();
+    private static final List<Integer> possibleAnswers = generateAllPossibleAnswers();
     private static final List<Integer> impossibleAnswers = new LinkedList<>();
+    private static final int[][] counts = new int[10000][14];
+    private static final int[] entropy = new int[10000];
+    private static final int[] guessPool = new int[10000];
+    private static int poolIndex = 0;
     private static boolean first = true;
     private static int currGuess = 0;
 
@@ -42,9 +46,8 @@ public class Guess {
             }
 
             // Give a guess
-            guess = guessWithMinimax();
-            // TODO Implement entropy method and compare with minimax
-//            guess = guessWithEntropy();
+            //guess = guessWithMinimax();
+            guess = guessWithEntropy();
             // Update current guess;
             currGuess = guess;
         }
@@ -95,7 +98,7 @@ public class Guess {
      *
      * @return a linked list of integers from 1000 => 9999
      */
-    public static List<Integer> generateAllPossibleNumbers() {
+    public static List<Integer> generateAllPossibleAnswers() {
         // Initialize an unordered set
         List<Integer> numbers = new LinkedList<>();
         // Add items to the set
@@ -106,24 +109,112 @@ public class Guess {
     }
 
     /**
+     * Convert a bulls/cows score to a corresponding array index
+     * @param score: target score
+     * @return: an array index
+     */
+    public static int convertScoreToIndex(int[] score){
+        // Calculate the sum of scores => Sum = 10*bulls + cows
+        int sum = score[0]*10 + score[1];
+        int index = 0;
+        switch (sum){
+            case 40:
+                index = 0;
+                break;
+            case 30:
+                index = 1;
+                break;
+            case 20:
+                index = 2;
+                break;
+            case 21:
+                index = 3;
+                break;
+            case 22:
+                index = 4;
+                break;
+            case 10:
+                index = 5;
+                break;
+            case 11:
+                index = 6;
+                break;
+            case 12:
+                index = 7;
+                break;
+            case 13:
+                index = 8;
+                break;
+            case 0:
+                index = 9;
+                break;
+            case 1:
+                index = 10;
+                break;
+            case 2:
+                index = 11;
+                break;
+            case 3:
+                index = 12;
+                break;
+            case 4:
+                index = 13;
+                break;
+        }
+        return index;
+    }
+
+    /**
      * Guess a number using the entropy technique
-     * Ref: http://primepuzzle.com/tc/entropy.html
+     * Ref: https://en.wikipedia.org/wiki/Entropy_(information_theory)
      *
      * @return a 4-digit integer
      */
     private static int guessWithEntropy() {
-        // TODO
+        // Initialize necessary variables
         int minEntropy = (int) Math.pow(10, 9);
-        int currEntropy = 0;
-        for (Integer i : possibleAnswers) {
-            currEntropy += Math.log(1 / possibleAnswers.size()) * possibleAnswers.size() * (-1);
+        int guess = 0;
 
-            if (currEntropy > minEntropy) {
-                return currEntropy;
+        // Loop through all possible answers
+        for (int i = 0; i < possibleAnswers.size(); i++) {
+
+            // Initialize corresponding count array
+            for (int j = 0; j < 14; j++) {
+                counts[i][j] = 0;
+            }
+
+            // Starting counting all answers with the same score
+            for (Integer possibleAnswer : possibleAnswers) {
+                // Swap?
+                int[] scr = score(possibleAnswers.get(i), possibleAnswer);
+                // Save to the count array
+                counts[i][convertScoreToIndex(scr)]++;
+            }
+
+            // Initialize corresponding entropy variable
+            entropy[i] = 0;
+
+            // Calculating entropy
+            for (int j = 0; j < 14; j++) {
+                int ctn = counts[i][j];
+                if (ctn > 1){
+                    entropy[i] += ctn * Math.log(ctn);
+                }
+            }
+            // If the current element less than or equal to the current min entropy
+            if (entropy[i] <= minEntropy){
+                if (entropy[i] < minEntropy){
+                    // Reset pool index
+                    poolIndex = 0;
+                    minEntropy = entropy[i];
+                }
+                // Add the current elem to the guess po;;
+                guessPool[poolIndex++] = possibleAnswers.get(i);
             }
         }
-        minEntropy = currEntropy;
-        return currEntropy;
+        // Choose the first guess from the pool
+        guess = guessPool[0];
+        return guess;
     }
 
     /**
