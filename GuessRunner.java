@@ -53,7 +53,7 @@ public class GuessRunner {
             if (args[1] != null){
                 try {
                     // Attempt to parse
-                    int tests = Integer.parseInt(args[1]);
+                    int tests = Math.abs(Integer.parseInt(args[1]));
                     runTests(tests);
                 }
                 catch (NumberFormatException e){
