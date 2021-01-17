@@ -47,41 +47,59 @@ public class GuessRunner {
 
 
     public static void main(String[] args) {
-        int guess_cnt = 0;
-        /* A dummy value, you need to code here
-         * to get a target number from your opponent
-         * should be a random number between [1000-9999]
-         */
-
-        // High range for the target number to discourage brute forcing
-        int target = getTarget(6000, 9999);
-
-        Result res = new Result();
-
-        System.out.println("Guess\tResponse\n");
-
-        while (res.getStrikes() < 4) {
-            /* take a guess from user provided class
-             * the user provided class must be a Guess.class file
-             * that has implemented a static function called make_guess()
-             */
-            int guess = Guess.make_guess(res.getHits(), res.getStrikes());
-
-            System.out.printf("%d\n", guess);
-
-            if (guess == -1) {    // user quits
-                System.out.printf("you quit: %d\n", target);
-                return;
+        // Run in test mode
+        if (args.length > 0 && args[0].equals("-t")){
+           // Check if the user enters the number of tests
+            if (args[1] != null){
+                try {
+                    // Attempt to parse
+                    int tests = Integer.parseInt(args[1]);
+                    runTests(tests);
+                }
+                catch (NumberFormatException e){
+                    System.out.println(e.getMessage());
+                }
+            }
+            else {
+                // Default to 100 tests
+                runTests(100);
             }
 
-            guess_cnt++;
-
-            res = processGuess(target, guess);
         }
+        else {
+            int guess_cnt = 0;
+            /* A dummy value, you need to code here
+             * to get a target number from your opponent
+             * should be a random number between [1000-9999]
+             */
 
+            // High range for the target number to discourage brute forcing
+            int target = getTarget(6000, 9999);
 
-        System.out.printf("Target: %d - Number of guesses: %d\n", target, guess_cnt);
-        //runTests();
+            Result res = new Result();
+
+            System.out.println("Guess\tResponse\n");
+
+            while (res.getStrikes() < 4) {
+                /* take a guess from user provided class
+                 * the user provided class must be a Guess.class file
+                 * that has implemented a static function called make_guess()
+                 */
+                int guess = Guess.make_guess(res.getHits(), res.getStrikes());
+
+                System.out.printf("%d\n", guess);
+
+                if (guess == -1) {    // user quits
+                    System.out.printf("you quit: %d\n", target);
+                    return;
+                }
+
+                guess_cnt++;
+
+                res = processGuess(target, guess);
+            }
+            System.out.printf("Target: %d - Number of guesses: %d\n", target, guess_cnt);
+        }
     }
 
     /**
@@ -130,13 +148,12 @@ public class GuessRunner {
     /**
      * This method is responsible running autonomous tests generating data for the report
      */
-    private static void runTests() {
+    private static void runTests(int tests) {
         // Initialize necessary variables
         int totalGuessCounts = 0;
         long totalExecTime = 0;
-        int numOfTests = 100;
 
-        for (int i = 0; i < numOfTests; i++) {
+        for (int i = 0; i < tests; i++) {
             int guess_cnt = 0;
             int target = getTarget(1000, 9999);
 
@@ -173,7 +190,7 @@ public class GuessRunner {
             totalExecTime += endTime - startTime;
         }
 
-        System.out.printf("Average Guess Counts: %f\n", (double) totalGuessCounts / numOfTests);
-        System.out.printf("Average Execution Time(s): %f\n", (double) totalExecTime / (numOfTests * Math.pow(10, 9)));
+        System.out.printf("Average Guess Counts: %f\n", (double) totalGuessCounts / tests);
+        System.out.printf("Average Execution Time(s): %f\n", (double) totalExecTime / (tests * Math.pow(10, 9)));
     }
 }

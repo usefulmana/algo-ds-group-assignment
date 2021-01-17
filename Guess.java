@@ -47,7 +47,7 @@ public class Guess {
 
             // Give a guess
             guess = guessWithMinimax();
-//             guess = guessWithEntropy();
+            //guess = guessWithEntropy();
             // Update current guess;
             currGuess = guess;
         }
