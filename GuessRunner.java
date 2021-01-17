@@ -81,6 +81,7 @@ public class GuessRunner {
 
 
         System.out.printf("Target: %d - Number of guesses: %d\n", target, guess_cnt);
+        //runTests();
     }
 
     /**
@@ -124,5 +125,55 @@ public class GuessRunner {
             numMask = numMask | digitMask;
         }
         return true;
+    }
+
+    /**
+     * This method is responsible running autonomous tests generating data for the report
+     */
+    private static void runTests() {
+        // Initialize necessary variables
+        int totalGuessCounts = 0;
+        long totalExecTime = 0;
+        int numOfTests = 100;
+
+        for (int i = 0; i < numOfTests; i++) {
+            int guess_cnt = 0;
+            int target = getTarget(1000, 9999);
+
+            Result res = new Result();
+
+            // Start counting exec time
+            long startTime = System.nanoTime();
+            while (res.getStrikes() < 4) {
+                /* take a guess from user provided class
+                 * the user provided class must be a Guess.class file
+                 * that has implemented a static function called make_guess()
+                 */
+                int guess = Guess.make_guess(res.getHits(), res.getStrikes());
+
+                System.out.printf("%d\n", guess);
+
+                if (guess == -1) {    // user quits
+                    System.out.printf("you quit: %d\n", target);
+                    return;
+                }
+
+                guess_cnt++;
+
+                res = processGuess(target, guess);
+            }
+            // Stop counting exec time
+            long endTime = System.nanoTime();
+            // Reset the Guess class every run
+            Guess.reset();
+
+            // Add current guess counts to total guess counts
+            totalGuessCounts += guess_cnt;
+            // Add current exec time to total exec time
+            totalExecTime += endTime - startTime;
+        }
+
+        System.out.printf("Average Guess Counts: %f\n", (double) totalGuessCounts / numOfTests);
+        System.out.printf("Average Execution Time(s): %f\n", (double) totalExecTime / (numOfTests * Math.pow(10, 9)));
     }
 }

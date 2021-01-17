@@ -10,11 +10,11 @@ import java.util.List;
  */
 public class Guess {
     // Initializing necessary variables
-    private static final List<Integer> possibleAnswers = generateAllPossibleAnswers();
-    private static final List<Integer> impossibleAnswers = new LinkedList<>();
-    private static final int[][] counts = new int[10000][14];
-    private static final int[] entropy = new int[10000];
-    private static final int[] guessPool = new int[10000];
+    private static List<Integer> possibleAnswers = generateAllPossibleAnswers();
+    private static List<Integer> impossibleAnswers = new LinkedList<>();
+    private static int[][] counts = new int[10000][14];
+    private static int[] entropy = new int[10000];
+    private static int[] guessPool = new int[10000];
     private static int poolIndex = 0;
     private static boolean first = true;
     private static int currGuess = 0;
@@ -46,12 +46,26 @@ public class Guess {
             }
 
             // Give a guess
-            //guess = guessWithMinimax();
-            guess = guessWithEntropy();
+            guess = guessWithMinimax();
+//             guess = guessWithEntropy();
             // Update current guess;
             currGuess = guess;
         }
         return guess;
+    }
+
+    /**
+     * A utility method to reset all static variables of the Guess class
+     */
+    public static void reset() {
+        possibleAnswers = generateAllPossibleAnswers();
+        impossibleAnswers = new LinkedList<>();
+        counts = new int[10000][14];
+        entropy = new int[10000];
+        guessPool = new int[10000];
+        poolIndex = 0;
+        first = true;
+        currGuess = 0;
     }
 
     /**
@@ -110,14 +124,15 @@ public class Guess {
 
     /**
      * Convert a bulls/cows score to a corresponding array index
+     *
      * @param score: target score
      * @return: an array index
      */
-    public static int convertScoreToIndex(int[] score){
+    public static int convertScoreToIndex(int[] score) {
         // Calculate the sum of scores => Sum = 10*bulls + cows
-        int sum = score[0]*10 + score[1];
+        int sum = score[0] * 10 + score[1];
         int index = 0;
-        switch (sum){
+        switch (sum) {
             case 40:
                 index = 0;
                 break;
@@ -197,13 +212,13 @@ public class Guess {
             // Calculating entropy
             for (int j = 0; j < 14; j++) {
                 int ctn = counts[i][j];
-                if (ctn > 1){
+                if (ctn > 1) {
                     entropy[i] += ctn * Math.log(ctn);
                 }
             }
             // If the current element less than or equal to the current min entropy
-            if (entropy[i] <= minEntropy){
-                if (entropy[i] < minEntropy){
+            if (entropy[i] <= minEntropy) {
+                if (entropy[i] < minEntropy) {
                     // Reset pool index
                     poolIndex = 0;
                     minEntropy = entropy[i];
