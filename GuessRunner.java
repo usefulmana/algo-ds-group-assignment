@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GuessRunner {
@@ -48,25 +50,22 @@ public class GuessRunner {
 
     public static void main(String[] args) {
         // Run in test mode
-        if (args.length > 0 && args[0].equals("-t")){
-           // Check if the user enters the number of tests
-            if (args[1] != null){
+        if (args.length > 0 && args[0].equals("-t")) {
+            // Check if the user enters the number of tests
+            if (args[1] != null) {
                 try {
                     // Attempt to parse
                     int tests = Math.abs(Integer.parseInt(args[1]));
                     runTests(tests);
-                }
-                catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     System.out.println(e.getMessage());
                 }
-            }
-            else {
+            } else {
                 // Default to 100 tests
                 runTests(100);
             }
 
-        }
-        else {
+        } else {
             int guess_cnt = 0;
             /* A dummy value, you need to code here
              * to get a target number from your opponent
@@ -153,6 +152,7 @@ public class GuessRunner {
         int totalGuessCounts = 0;
         long totalExecTime = 0;
         int maxGuesses = 0;
+        List<Integer> guessCountList = new ArrayList<>();
 
         for (int i = 0; i < tests; i++) {
             int guess_cnt = 0;
@@ -186,9 +186,11 @@ public class GuessRunner {
             Guess.reset();
 
             // Max Guess Count
-            if (guess_cnt > maxGuesses){
+            if (guess_cnt > maxGuesses) {
                 maxGuesses = guess_cnt;
             }
+            // Add Guess Count to guessCountList
+            guessCountList.add(guess_cnt);
             // Add current guess counts to total guess counts
             totalGuessCounts += guess_cnt;
             // Add current exec time to total exec time
@@ -198,5 +200,20 @@ public class GuessRunner {
         System.out.printf("\nAverage Guess Counts: %f\n", (double) totalGuessCounts / tests);
         System.out.printf("Maximum # of Guesses: %d\n", maxGuesses);
         System.out.printf("Average Execution Time(s): %f\n", (double) totalExecTime / (tests * Math.pow(10, 9)));
+        System.out.println("Guess Count Distribution: ");
+        int[] possibleGuessCounts = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        for (int i :
+                possibleGuessCounts) {
+            int count = 0;
+            for (int j:
+                 guessCountList) {
+                if (j == i){
+                    count++;
+                }
+            }
+            if (count > 0){
+                System.out.printf("- %d guess(es): %d\n", i, count);
+            }
+        }
     }
 }
