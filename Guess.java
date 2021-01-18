@@ -22,7 +22,7 @@ public class Guess {
     public static int make_guess(int hits, int strikes) {
 
         // First guess
-        int guess = 1234;
+        int guess = 1123;
         // Check if the current guess is the first guess
         if (first) {
             // Assign currGuess to guess
@@ -201,7 +201,7 @@ public class Guess {
             // Starting counting all answers with the same score
             for (Integer possibleAnswer : possibleAnswers) {
                 // Swap?
-                int[] scr = score(possibleAnswers.get(i), possibleAnswer);
+                int[] scr = score(possibleAnswer, possibleAnswers.get(i));
                 // Save to the count array
                 counts[i][convertScoreToIndex(scr)]++;
             }
