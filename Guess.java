@@ -12,9 +12,9 @@ public class Guess {
     // Initializing necessary variables
     private static List<Integer> possibleAnswers = generateAllPossibleAnswers();
     private static List<Integer> impossibleAnswers = new LinkedList<>();
-    private static int[][] counts = new int[10000][14];
-    private static int[] entropy = new int[10000];
-    private static int[] guessPool = new int[10000];
+    private static int[][] counts = new int[9000][14];
+    private static int[] entropy = new int[9000];
+    private static int[] guessPool = new int[9000];
     private static int poolIndex = 0;
     private static boolean first = true;
     private static int currGuess = 0;
@@ -259,7 +259,6 @@ public class Guess {
             // Check possible answers with the unused list elements
             for (Integer j : possibleAnswers) {
                 // Calculate the scores
-                // TODO SWAP i & j?
                 int[] results = score(i, j);
                 // Save scores
                 miniMaxTable[results[1]][results[0]]++;
