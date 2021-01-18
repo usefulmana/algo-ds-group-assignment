@@ -152,6 +152,7 @@ public class GuessRunner {
         // Initialize necessary variables
         int totalGuessCounts = 0;
         long totalExecTime = 0;
+        int maxGuesses = 0;
 
         for (int i = 0; i < tests; i++) {
             int guess_cnt = 0;
@@ -184,13 +185,18 @@ public class GuessRunner {
             // Reset the Guess class every run
             Guess.reset();
 
+            // Max Guess Count
+            if (guess_cnt > maxGuesses){
+                maxGuesses = guess_cnt;
+            }
             // Add current guess counts to total guess counts
             totalGuessCounts += guess_cnt;
             // Add current exec time to total exec time
             totalExecTime += endTime - startTime;
         }
 
-        System.out.printf("Average Guess Counts: %f\n", (double) totalGuessCounts / tests);
+        System.out.printf("\nAverage Guess Counts: %f\n", (double) totalGuessCounts / tests);
+        System.out.printf("Maximum # of Guesses: %d\n", maxGuesses);
         System.out.printf("Average Execution Time(s): %f\n", (double) totalExecTime / (tests * Math.pow(10, 9)));
     }
 }

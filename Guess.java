@@ -259,6 +259,7 @@ public class Guess {
             // Check possible answers with the unused list elements
             for (Integer j : possibleAnswers) {
                 // Calculate the scores
+                // TODO SWAP i & j?
                 int[] results = score(i, j);
                 // Save scores
                 miniMaxTable[results[1]][results[0]]++;
